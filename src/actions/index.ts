@@ -3,3 +3,6 @@ export const ADD_TASK = "ADD_TASK";
 export const DELETE_TASK = "DELETE_TASK";
 export const DELETE_SECTION = "DELETE_SECTION";
 export const CHANGE_CATEGORY = "CHANGE_CATEGORY";
+export const CHANGE_TASK_NAME = "CHANGE_TASK_NAME";
+export const CHANGE_TASK_DETAIL = "CHANGE_TASK_DETAIL";
+export const MOVE_TASK = "MOVE_TASK";

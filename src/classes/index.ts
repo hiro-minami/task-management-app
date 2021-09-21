@@ -1,13 +1,13 @@
 export class Task {
-    private id: number;
+    private id: string;
     private taskName: string | undefined;
     private taskDetail: string | undefined;
-    constructor(id: number = 0, taskName?: string | undefined, taskDetail?: string | undefined) {
+    constructor(id: string = "", taskName?: string | undefined, taskDetail?: string | undefined) {
         this.id = id;
         this.taskName = taskName;
         this.taskDetail = taskDetail;
     }
-    public getId(): number | undefined {
+    public getId(): string | undefined {
         if (this.id) return this.id;
         else return undefined;
     }
@@ -19,7 +19,7 @@ export class Task {
         if (this.taskDetail) return this.taskDetail;
         else return undefined;
     }
-    public setId(newId: number): void {
+    public setId(newId: string): void {
         this.id = newId;
     }
     public setTaskName(newName: string): void {
@@ -50,6 +50,9 @@ export class TaskSection {
     public getTaskList(): Task[] {
         return this.taskList;
     }
+    public getTask(id: number): Task {
+        return this.getTaskList()[id - 1];
+    }
     public setId(newId: number): void {
         this.id = newId;
     }
@@ -65,7 +68,7 @@ export class TaskSection {
     public addTaskList(newTask: Task): void {
         this.taskList.push(newTask);
     }
-    public deleteTask(deleteId: number): void {
+    public deleteTask(deleteId: string): void {
         this.taskList = this.taskList.filter((task) => task.getId() !== deleteId);
     }
 }

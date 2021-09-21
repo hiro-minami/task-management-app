@@ -1,7 +1,7 @@
-import { ADD_SECTION, DELETE_SECTION, ADD_TASK, DELETE_TASK, CHANGE_CATEGORY } from "../actions";
+import { ADD_SECTION, DELETE_SECTION, ADD_TASK, DELETE_TASK, CHANGE_CATEGORY, MOVE_TASK, CHANGE_TASK_NAME, CHANGE_TASK_DETAIL } from "../actions";
 import { Task, TaskManager, TaskSection } from "../classes";
 
-const reducer = (state: TaskManager, action: { type: string; id?: number; sectionId?: number; taskId?: number; newCategory?: string }) => {
+const reducer = (state: TaskManager, action: { type: string; id?: number; sectionId?: number; taskId?: string; newCategory?: string; newTaskName?: string; newTaskDetail: string; targetFrom?: string; targetTo?: string }) => {
     switch (action.type) {
         case ADD_SECTION:
             const newSection = new TaskSection(state.getLength() + 1, "", []);
@@ -12,7 +12,7 @@ const reducer = (state: TaskManager, action: { type: string; id?: number; sectio
             state.setTaskSectionList(newSectionList);
             return new TaskManager(state.getTaskSectionList());
         case ADD_TASK:
-            const newTask = new Task(state.getSection(action.sectionId!).getLength() + 1);
+            const newTask = new Task(`${action.sectionId!}/${state.getSection(action.sectionId!).getLength() + 1}`);
             state.getSection(action.sectionId!).addTaskList(newTask);
             return new TaskManager(state.getTaskSectionList());
         case DELETE_TASK:
@@ -20,11 +20,38 @@ const reducer = (state: TaskManager, action: { type: string; id?: number; sectio
                 .getSection(action.sectionId!)
                 .getTaskList()
                 .filter((task) => task.getId() !== action.taskId!);
-            console.log(newTaskList);
             state.getSection(action.sectionId!).setTaskList(newTaskList);
             return new TaskManager(state.getTaskSectionList());
         case CHANGE_CATEGORY:
             state.getSection(action.sectionId!).setSectionName(action.newCategory!);
+            return new TaskManager(state.getTaskSectionList());
+        case CHANGE_TASK_NAME:
+            state
+                .getSection(action.sectionId!)
+                .getTask(+action.taskId!.split("/")[1]!)
+                .setTaskName(action.newTaskName!);
+            return new TaskManager(state.getTaskSectionList());
+        case CHANGE_TASK_DETAIL:
+            state
+                .getSection(action.sectionId!)
+                .getTask(+action.taskId!.split("/")[1]!)
+                .setTaskDetail(action.newTaskDetail!);
+            return new TaskManager(state.getTaskSectionList());
+        case MOVE_TASK:
+            const fromList = action.targetFrom!.split("/");
+            const toList = action.targetTo!.split("/");
+            console.log(fromList);
+            console.log(toList);
+            const targetTask = state
+                .getSection(+fromList[0])
+                .getTaskList()
+                .splice(+fromList[1] - 1, 1)[0];
+            console.log(state.getSection(+fromList[0]).getTaskList());
+            state
+                .getSection(+toList[0])
+                .getTaskList()
+                .splice(+toList[1] - 1, 0, targetTask);
+            console.log(state.getSection(+toList[0]).getTaskList());
             return new TaskManager(state.getTaskSectionList());
         default:
             return state;
