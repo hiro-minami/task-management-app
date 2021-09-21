@@ -1,13 +1,13 @@
 export class Task {
-    private id: string | undefined;
+    private id: number;
     private taskName: string | undefined;
     private taskDetail: string | undefined;
-    constructor(id?: string | undefined, taskName?: string | undefined, taskDetail?: string | undefined) {
+    constructor(id: number = 0, taskName?: string | undefined, taskDetail?: string | undefined) {
         this.id = id;
         this.taskName = taskName;
         this.taskDetail = taskDetail;
     }
-    public getId(): string | undefined {
+    public getId(): number | undefined {
         if (this.id) return this.id;
         else return undefined;
     }
@@ -19,7 +19,7 @@ export class Task {
         if (this.taskDetail) return this.taskDetail;
         else return undefined;
     }
-    public setId(newId: string): void {
+    public setId(newId: number): void {
         this.id = newId;
     }
     public setTaskName(newName: string): void {
@@ -31,16 +31,16 @@ export class Task {
 }
 
 export class TaskSection {
-    private id: string;
-    private sectionName: string | undefined;
+    private id: number;
+    private sectionName: string;
     private taskList: Task[];
-    constructor(id: string, sectionName?: string | undefined, taskList?: Task[]) {
+    constructor(id: number, sectionName: string = "", taskList?: Task[]) {
         this.id = id;
         this.sectionName = sectionName;
         if (taskList) this.taskList = taskList;
         else this.taskList = [];
     }
-    public getId(): string {
+    public getId(): number {
         return this.id;
     }
     public getSectionName(): string | undefined {
@@ -50,7 +50,7 @@ export class TaskSection {
     public getTaskList(): Task[] {
         return this.taskList;
     }
-    public setId(newId: string): void {
+    public setId(newId: number): void {
         this.id = newId;
     }
     public setTaskList(newList: Task[]): void {
@@ -65,7 +65,7 @@ export class TaskSection {
     public addTaskList(newTask: Task): void {
         this.taskList.push(newTask);
     }
-    public deleteTask(deleteId: string): void {
+    public deleteTask(deleteId: number): void {
         this.taskList = this.taskList.filter((task) => task.getId() !== deleteId);
     }
 }
@@ -79,6 +79,9 @@ export class TaskManager {
     public getTaskSectionList(): TaskSection[] {
         return this.taskSectionList;
     }
+    public getSection(id: number): TaskSection {
+        return this.getTaskSectionList()[id - 1];
+    }
     public setTaskSectionList(newList: TaskSection[]): void {
         this.taskSectionList = newList;
     }
@@ -88,7 +91,7 @@ export class TaskManager {
     public addTaskSection(newCard: TaskSection) {
         this.taskSectionList.push(newCard);
     }
-    public deleteTaskSection(deleteId: string): void {
+    public deleteTaskSection(deleteId: number): void {
         this.taskSectionList = this.taskSectionList.filter((taskSection) => taskSection.getId() !== deleteId);
     }
 }

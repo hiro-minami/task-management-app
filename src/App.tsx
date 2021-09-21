@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import { useReducer } from "react";
 import NavBar from "./components/NavBar";
 import TaskContainer from "./components/TaskContainer";
 import { AppContext } from "./contexts/AppContexts";
+import reducer from "./reducers";
+import { manager } from "./models";
 
 export default function App() {
-    const { state, dispatch } = useContext(AppContext);
-    console.log(state);
+    const [state, dispatch] = useReducer(reducer, manager);
     return (
         <AppContext.Provider value={{ state, dispatch }}>
             <NavBar />
