@@ -41,7 +41,7 @@ const SectionCard: React.FC<TaskSectionProps> = (props) => {
                     <Grid container justifyContent="center">
                         <TextareaAutosize aria-label="empty textarea" placeholder="Section" value={category} style={{ width: 260 }} onChange={changeCategory} />
                         {props.props.getTaskList().map((task, index) => (
-                            <TaskCard key={index} task={task} category={category} sectionId={sectionId} />
+                            <TaskCard key={index} task={task} category={category} sectionId={sectionId} index={`${sectionId}-${index + 1}`} />
                         ))}
                         <Grid container justifyContent="flex-start">
                             <CardActions>

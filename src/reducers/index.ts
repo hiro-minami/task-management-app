@@ -12,7 +12,7 @@ const reducer = (state: TaskManager, action: { type: string; id?: number; sectio
             state.setTaskSectionList(newSectionList);
             return new TaskManager(state.getTaskSectionList());
         case ADD_TASK:
-            const newTask = new Task(`${action.sectionId!}/${state.getSection(action.sectionId!).getLength() + 1}`);
+            const newTask = new Task(`${action.sectionId!}-${state.getSection(action.sectionId!).getLength() + 1}`);
             state.getSection(action.sectionId!).addTaskList(newTask);
             return new TaskManager(state.getTaskSectionList());
         case DELETE_TASK:
@@ -28,30 +28,24 @@ const reducer = (state: TaskManager, action: { type: string; id?: number; sectio
         case CHANGE_TASK_NAME:
             state
                 .getSection(action.sectionId!)
-                .getTask(+action.taskId!.split("/")[1]!)
+                .getTask(+action.taskId!.split("-")[1]!)
                 .setTaskName(action.newTaskName!);
             return new TaskManager(state.getTaskSectionList());
         case CHANGE_TASK_DETAIL:
             state
                 .getSection(action.sectionId!)
-                .getTask(+action.taskId!.split("/")[1]!)
+                .getTask(+action.taskId!.split("-")[1]!)
                 .setTaskDetail(action.newTaskDetail!);
             return new TaskManager(state.getTaskSectionList());
         case MOVE_TASK:
-            const fromList = action.targetFrom!.split("/");
-            const toList = action.targetTo!.split("/");
-            console.log(fromList);
-            console.log(toList);
+            const fromList = action.targetFrom!.split("-");
+            const toList = action.targetTo!.split("-");
             const targetTask = state
                 .getSection(+fromList[0])
                 .getTaskList()
-                .splice(+fromList[1] - 1, 1)[0];
-            console.log(state.getSection(+fromList[0]).getTaskList());
-            state
-                .getSection(+toList[0])
-                .getTaskList()
-                .splice(+toList[1] - 1, 0, targetTask);
-            console.log(state.getSection(+toList[0]).getTaskList());
+                .splice(+fromList[1] - 1, 1);
+            targetTask[0].setId(action.targetTo!);
+            state.getSection(+toList[0]).addTaskList(targetTask[0]);
             return new TaskManager(state.getTaskSectionList());
         default:
             return state;
