@@ -12,7 +12,7 @@ const reducer = (state: TaskManager, action: { type: string; id?: number; sectio
             state.setTaskSectionList(newSectionList);
             return new TaskManager(state.getTaskSectionList());
         case ADD_TASK:
-            const newTask = new Task(`${action.sectionId!}-${state.getSection(action.sectionId!).getLength() + 1}`);
+            const newTask = new Task(`${action.sectionId!}-${state.getSection(action.sectionId!).getLength() + 1}`, action.newTaskName!, action.newTaskDetail!);
             state.getSection(action.sectionId!).addTaskList(newTask);
             return new TaskManager(state.getTaskSectionList());
         case DELETE_TASK:
@@ -39,13 +39,16 @@ const reducer = (state: TaskManager, action: { type: string; id?: number; sectio
             return new TaskManager(state.getTaskSectionList());
         case MOVE_TASK:
             const fromList = action.targetFrom!.split("-");
-            const toList = action.targetTo!.split("-");
+            const target = action.targetTo;
             const targetTask = state
                 .getSection(+fromList[0])
                 .getTaskList()
                 .splice(+fromList[1] - 1, 1);
-            targetTask[0].setId(action.targetTo!);
-            state.getSection(+toList[0]).addTaskList(targetTask[0]);
+            console.log("targetTask");
+            console.log("targetTask");
+            console.log(targetTask);
+            targetTask[0].setId(target!);
+            state.getSection(+target!).addTaskList(targetTask[0]);
             return new TaskManager(state.getTaskSectionList());
         default:
             return state;
